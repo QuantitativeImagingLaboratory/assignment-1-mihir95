@@ -8,7 +8,14 @@ class binary_image:
         image: a grey scale image
         returns a histogram"""
 
-        hist = [0]*256
+        (row, col) = image.shape
+        hist = [0] * 256
+
+        for i in range(255):
+            for j in range(row-1):
+                for k in range(col-1):
+                    if image[j,k]==i:
+                        hist[i]=hist[i]+1
 
 
         return hist
