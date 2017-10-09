@@ -19,7 +19,6 @@ class binary_image:
 
 
         return hist
-
     def find_optimal_threshold(self, hist):
         """analyses a histogram it to find the optimal threshold value assuming a bimodal histogram
         takes as input
