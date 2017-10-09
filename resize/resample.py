@@ -23,9 +23,21 @@ class resample:
         returns a resized image based on the nearest neighbor interpolation method
         """
 
-        #Write your code for nearest neighbor interpolation here
+       newW = 0
+        newY = 0
+        target = Image.new('RGB', (newW, newY), 'white')
+        with Image.open("cell2.jpg") as image:
+            w, h = image.size
+        height, width, channels = scipy.ndimage.imread("cell2.jpg").shape
 
-        return image
+        for x in range(0, newW):
+            for y in range(0, newY):
+                srcX = int(round(float(x) / float(newW) * float(w)))
+                srcY = int(round(float(y) / float(newY) * float(h)))
+                srcX = min(srcX, w - 1)
+                srcY = min(srcY, h - 1)
+                pixel = image[target, x, y]
+        return target
 
 
     def bilinear_interpolation(self, image, fx, fy):
@@ -37,6 +49,31 @@ class resample:
         """
 
         # Write your code for bilinear interpolation here
+        rows, cols, colours = image.shape
+
+        n_rows = int(round(rows * fx, 0))
+        n_cols = int(round(cols * fy, 0))
+
+        enlarged_img = np.ones((n_rows, n_cols, colours))
+
+        for i in range(n_rows - 1):
+            for j in range(n_cols - 1):
+                x_coord = j / fx
+                y_coord = i / fy
+
+                xc = int(math.ceil(x_coord))
+                xf = int(math.floor(x_coord))
+                yc = int(math.ceil(y_coord))
+                yf = int(math.floor(y_coord))
+
+                W_xc = xc - x_coord
+                W_xf = x_coord - xf
+                W_yc = yc - y_coord
+                W_yf = y_coord - yf
+
+            enlarged_img[i, j, :] = 255 - np.around(W_xc * (W_yc * image[yf, xf, :] + W_yf * image[yc, xf, :]) + W_xf * (
+            W_yc * image[yf, xc, :] + W_yf * image[yc, xc, :]), 0)
 
         return image
+
 
